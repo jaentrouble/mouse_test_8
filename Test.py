@@ -30,6 +30,11 @@ cur_loop = int(args.cur_loop)
 cur_r = int(args.cur_r)
 load_buffer = args.load_buffer
 
+env_kwargs = dict(
+    apple_num = 10,
+    eat_apple = 1.0,
+)
+
 my_tqdm = tqdm(total=total_steps, dynamic_ncols=True)
 
 print('starting loop, {} loops left'.format(total_loop))
@@ -39,7 +44,7 @@ if not args.vm :
     bar = np.ones((5,3),dtype=np.uint8)*np.array([255,255,0],dtype=np.uint8)
 # For benchmark
 st = time.time()
-env = gym.make(ENVIRONMENT)
+env = gym.make(ENVIRONMENT, **env_kwargs)
 bef_o = env.reset()
 if args.load :
     player = Player(env.observation_space, env.action_space, my_tqdm,

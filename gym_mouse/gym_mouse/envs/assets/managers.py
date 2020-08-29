@@ -13,7 +13,13 @@ class ThingsManager():
         self._id_dict = {}   # {ID : Actual object}
 
     def regist(self, thing):
-        """Register a new thing to the manager and return the id of that"""
+        """Register a new thing to the manager 
+
+        return 
+        ------
+        id : int
+            id given to the thing
+        """
         thing_id = self._new_id
         self._id_dict[thing_id] = thing
         self._new_id += 1
@@ -96,10 +102,17 @@ class ThingsManager():
             v.update()
 
 class CollisionManager():
-    """
-    Manages all interactions and returns Reward for every actions
+    """Manages all interactions and returns Reward for every actions
+
     """
     def __init__(self, size, tmanager:ThingsManager):
+        """
+        parameters
+        ----------
+        size : tuple of two int
+            size of the map
+        tmanager : ThingsManager
+        """
         self._size = size
         self._grid = np.zeros(size, dtype=np.int32)
         self._TM = tmanager
@@ -130,7 +143,7 @@ class CollisionManager():
                 np.any(updated_idx[1] >= self._size[1]-1) or\
                 np.any(np.array(updated_idx) <= 0):
                 self._TM.id_(ID).hit_wall()
-                # If hit wall, reset the game
+                # If the mouse hits the wall, reset the game
                 if ID == mouse_ID :
                     done = True
                 updated_idx = self._TM.id_(ID).indices
@@ -159,8 +172,8 @@ class CollisionManager():
         reward = mouse.reward
         ate_apple = mouse.ate_apple()
         mouse.reset_reward()
-        if mouse.is_dead():
-            reward = -1
-            done = True
+        # if mouse.is_dead():
+        #     reward = -1
+        #     done = True
 
         return reward, done, ate_apple

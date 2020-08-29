@@ -4,7 +4,14 @@ import time
 from tqdm import trange
 import numpy as np
 
-EYE = False
+EYE = True
+
+env_kwargs = dict(
+    apple_num=50,
+    eat_apple = 1.0,
+    hit_wall = -1.0,
+)
+
 
 if EYE:
     from gym.envs.classic_control import rendering
@@ -12,7 +19,7 @@ if EYE:
     eye_bar = np.ones((5,3),dtype=np.uint8)*np.array([255,255,0],dtype=np.uint8)
 
 st = time.time()
-env = gym.make('mouseCl-v0')
+env = gym.make('mouseCl-v2', **env_kwargs)
 env.seed(3)
 env.reset()
 # diff = 0
@@ -28,7 +35,7 @@ for _ in trange(100):
         eye_img = eye_img.reshape(50,205*5,3)
         eye_viewer.imshow(eye_img)
         env.render()
-        time.sleep(0.4)
+        time.sleep(0.1)
     if d :
         env.reset()
 # env.render()

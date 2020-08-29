@@ -1,6 +1,5 @@
 from .base_things import Base
 from ...constants import colors, tools
-from ...constants import rewards as R
 import numpy as np
 from skimage import draw
 from .things_consts import ThingsType as tt
@@ -12,11 +11,22 @@ class Mouse(Base):
     Mouse
     Our Hero
     """
-    def __init__(self, center, theta, shape):
+    def __init__(self, center, theta, shape, rewards):
         """
-        center : Center coordinate of the mouse
-        theta : The direction the mouse is heading, in radian
-        shape : Maximum size of the grid
+        Arguments
+        ---------
+        center : tuple of two int
+            Center coordinate of the mouse
+        theta : float
+            The direction the mouse is heading, in radian
+        shape : tuple of two int
+            Maximum size of the grid
+
+        rewards : dict
+            eat_apple : float
+                Reward when eat apple
+            hit_wall : float
+                Punishment when hit wall
         """
         super().__init__()
         self._half_width = ds.Mouse_half_width
@@ -34,6 +44,7 @@ class Mouse(Base):
         self._reward = 0
         self._dead = False
         self._ate_apple = False
+        self._reward_dict = rewards
 
     def update_pos(self, center, theta):
         self._center = np.array(center)
@@ -70,9 +81,11 @@ class Mouse(Base):
     def hit_wall(self):
         """
         Call only once after update_delta
-        Will change back to last center/theta
+        Will change back to last center/theta 
+        and add hit_wall punishment to reward
         """
         self.update_pos(self._last_center, self._last_theta)
+        self._reward += self._reward_dict['hit_wall']
 
     @property
     def eye(self):
@@ -116,5 +129,5 @@ class Mouse(Base):
 
     def collided(self, t_type):
         if t_type == tt.Apple:
-            self._reward += R.eat_apple
+            self._reward += self._reward_dict['eat_apple']
             self._ate_apple = True

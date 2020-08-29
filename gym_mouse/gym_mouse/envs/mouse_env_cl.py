@@ -7,15 +7,36 @@ from .constants import engine_const as ec
 import numpy as np
 
 class MouseEnv_cl(gym.Env) :
+    """MouseEnv_cl-v2
+
+    Now it does not calculate mouse - apple distance.
+    Instead, it can have multiple apples    
+    """
     metadata = {
         'render.modes' : ['human','rgb']
     }
-    def __init__(self):
+    def __init__(self, **kwargs):
+        """
+        kwargs
+        ------
+        apple_num : int
+            number of apples in a map. Default is 1
+        eat_apple : float
+            reward given when apple is eaten. Default is 1.0
+        hit_wall : float
+            punishment(or reward?) given when hit wall. Default is 0
+        """
         #Turn left 45°, Move forward, Turn right 45°
         self.action_space = Discrete(3)
         self._done = False
         self.viewer = None
         self.engine = None
+
+        kwargs.setdefault('apple_num',1)
+        kwargs.setdefault('eat_apple',1.0)
+        kwargs.setdefault('hit_wall',0)
+        self._options = kwargs
+
         self.max_step = 1000
         self.cur_step = 0
         self.image_size = (720,720)
@@ -51,12 +72,6 @@ class MouseEnv_cl(gym.Env) :
 
         return observation, reward, done, info
 
-    def check_step(self, action):
-        _ = self.step(action)
-        o_new = self.engine.observe()
-        o_old = self.engine.old_obs()
-        return np.linalg.norm(np.subtract(o_old,o_new))
-
     def reset(self):
         """
         Reset the environment and return initial observation
@@ -88,10 +103,10 @@ class MouseEnv_cl(gym.Env) :
             self.viewer = None
 
     def _new_engine(self):
-        return Engine(*self.image_size)
+        return Engine(self.image_size, **self._options)
 
 # Testing
 if __name__ == '__main__' :
-    env = MouseEnv()
+    env = MouseEnv_cl()
     env.render()
     a = input()
