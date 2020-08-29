@@ -15,7 +15,7 @@ ENVIRONMENT = 'mouseCl-v2'
 env_kwargs = dict(
     apple_num=10,
     eat_apple = 1.0,
-    hit_wall = -1.0,
+    hit_wall = 0,
 )
 
 
