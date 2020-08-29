@@ -130,7 +130,6 @@ else :
     next_args = []
     next_args.append('python')
     next_args.append(__file__)
-    next_args.append('-v')
     next_args.append('-l')
     next_args.append(next_dir)
     next_args.append('--step')
