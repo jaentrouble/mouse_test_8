@@ -8,19 +8,27 @@ from tqdm import tqdm
 import argparse
 import os
 import sys
+from tensorflow.profiler.experimental import Profile
 
-ENVIRONMENT = 'mouseCl-v1'
+ENVIRONMENT = 'mouseCl-v2'
+
+env_kwargs = dict(
+    apple_num=10,
+    eat_apple = 1.0,
+    hit_wall = -1.0,
+)
+
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-v', dest='vm',action='store_true', default=False)
+parser.add_argument('-r','--render', dest='render',action='store_true', default=False)
 parser.add_argument('-l', dest='load',default=False)
 parser.add_argument('--step', dest='total_steps',default=100000)
 parser.add_argument('--loop', dest='total_loop',default=20)
 parser.add_argument('--curloop', dest='cur_loop',default=0)
-parser.add_argument('--logname', dest='log_name',default=False)
+parser.add_argument('-n','--logname', dest='log_name',default=False)
 parser.add_argument('--curround', dest='cur_r',default=0)
 parser.add_argument('-lb', dest='load_buffer',action='store_true',default=False)
-# parser.add_argument('-pf', dest='profile',action='store_true',default=False)
+parser.add_argument('-pf', dest='profile',action='store_true',default=False)
 args = parser.parse_args()
 
 vid_type = 'mp4'
@@ -30,22 +38,19 @@ cur_loop = int(args.cur_loop)
 cur_r = int(args.cur_r)
 load_buffer = args.load_buffer
 
-env_kwargs = dict(
-    apple_num = 10,
-    eat_apple = 1.0,
-)
-
 my_tqdm = tqdm(total=total_steps, dynamic_ncols=True)
 
 print('starting loop, {} loops left'.format(total_loop))
-if not args.vm :
+if args.render :
     from gym.envs.classic_control.rendering import SimpleImageViewer
     eye_viewer = SimpleImageViewer(maxwidth=1500)
     bar = np.ones((5,3),dtype=np.uint8)*np.array([255,255,0],dtype=np.uint8)
 # For benchmark
 st = time.time()
+
 env = gym.make(ENVIRONMENT, **env_kwargs)
 bef_o = env.reset()
+
 if args.load :
     player = Player(env.observation_space, env.action_space, my_tqdm,
                 args.load, args.log_name, cur_loop*total_steps, cur_r, load_buffer)
@@ -55,18 +60,56 @@ elif args.log_name:
                 log_name=args.log_name)
 else :
     player = Player(env.observation_space, env.action_space, my_tqdm)
-if not args.vm :
+if args.render :
     env.render()
-for step in range(total_steps):
-    action = player.act(bef_o)
-    aft_o,r,d,i = env.step(action)
-    player.step(bef_o,action,r,d,i)
-    if d :
-        bef_o = env.reset()
-    else:
-        bef_o = aft_o
-    if not args.vm :
-        env.render()
+
+if args.profile:
+    # Warm up
+    for step in range(hp.Learn_start+20):
+        action = player.act(bef_o)
+        aft_o,r,d,i = env.step(action)
+        player.step(bef_o,action,r,d,i)
+        if d :
+            bef_o = env.reset()
+        else:
+            bef_o = aft_o
+        if args.render :
+            env.render()
+
+    with Profile(f'log/{args.log_name}'):
+        for step in range(5):
+            action = player.act(bef_o)
+            aft_o,r,d,i = env.step(action)
+            player.step(bef_o,action,r,d,i)
+            if d :
+                bef_o = env.reset()
+            else:
+                bef_o = aft_o
+            if args.render :
+                env.render()
+    remaining_steps = total_steps - hp.Learn_start - 25
+    for step in range(remaining_steps):
+        action = player.act(bef_o)
+        aft_o,r,d,i = env.step(action)
+        player.step(bef_o,action,r,d,i)
+        if d :
+            bef_o = env.reset()
+        else:
+            bef_o = aft_o
+        if args.render :
+            env.render()
+
+else :
+    for step in range(total_steps):
+        action = player.act(bef_o)
+        aft_o,r,d,i = env.step(action)
+        player.step(bef_o,action,r,d,i)
+        if d :
+            bef_o = env.reset()
+        else:
+            bef_o = aft_o
+        if args.render :
+            env.render()
 
 my_tqdm.close()
 

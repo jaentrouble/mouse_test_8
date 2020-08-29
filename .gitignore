@@ -3,6 +3,8 @@
 # Savefiles
 *.npz
 *.bin
+savefiles/
+
 # log files
 log/
 
