@@ -97,7 +97,6 @@ if args.profile:
             player.save_model()
             score = player.evaluate(gym.make(ENVIRONMENT, **env_kwargs), vid_type)
             print('eval_score:{0}'.format(score))
-            print('{0}steps took {1} sec'.format(total_steps,time.time()-st))
         action = player.act(bef_o)
         aft_o,r,d,i = env.step(action)
         player.step(bef_o,action,r,d,i)
