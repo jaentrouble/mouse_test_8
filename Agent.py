@@ -2,7 +2,6 @@ import tensorflow as tf
 from tensorflow import math as tm
 from tensorflow import keras
 from tensorflow.keras import layers
-from tensorflow.keras.mixed_precision import experimental as mixed_precision
 import agent_assets.A_hparameters as hp
 from datetime import datetime
 from os import path, makedirs
@@ -20,12 +19,6 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu,True)
 
 keras.backend.clear_session()
-# if len(gpus)>0:
-#     policy = mixed_precision.Policy('mixed_float16')
-#     print('policy = mixed_float16')
-# else : 
-#     policy = mixed_precision.Policy('float32')
-# mixed_precision.set_policy(policy)
 
 class Player():
     def __init__(self, observation_space, action_space, tqdm, m_dir=None,
@@ -59,13 +52,10 @@ class Player():
             # Concatenate both eye's inputs
             concat = layers.Concatenate()([left_encoded,right_encoded])
             outputs = self.brain_layers(concat)
-            outputs = layers.Activation('linear',dtype='float32')(outputs)
             # Build models
             self.model = keras.Model(inputs=[left_input, right_input],
                                 outputs=outputs)
             optimizer = keras.optimizers.Adam(learning_rate=self._lr)
-            optimizer = mixed_precision.LossScaleOptimizer(optimizer,
-                                                        loss_scale='dynamic')
             self.model.compile(optimizer=optimizer)
         else:
             self.model = keras.models.load_model(m_dir)
@@ -197,17 +187,13 @@ class Player():
         with tf.GradientTape() as tape:
             q = self.model(o, training=True)
             q_sa = tf.math.reduce_sum(q*mask, axis=1)
-            # loss = keras.losses.MSE(q_samp, q_sa)
             unweighted_loss = tf.math.square(q_samp - q_sa)
             loss = tf.math.reduce_mean(weights * unweighted_loss)
             tf.summary.scalar('Loss', loss, total_step)
-            scaled_loss = self.model.optimizer.get_scaled_loss(loss)
-            tf.summary.scalar('Scaled_Loss', scaled_loss, total_step)
 
         priority = (tf.math.abs(q_samp - q_sa) + hp.Buf.epsilon)**hp.Buf.alpha
         trainable_vars = self.model.trainable_variables
-        scaled_gradients = tape.gradient(scaled_loss, trainable_vars)
-        gradients = self.model.optimizer.get_unscaled_gradients(scaled_gradients)
+        gradients = tape.gradient(loss, trainable_vars)
         self.model.optimizer.apply_gradients(zip(gradients, trainable_vars))
         return priority
 
