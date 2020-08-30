@@ -18,6 +18,7 @@ env_kwargs = dict(
     hit_wall = 0,
 )
 
+hp.epsilon = 1
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-r','--render', dest='render',action='store_true', default=False)
