@@ -32,10 +32,26 @@ Increase apple number And see if that helps.
 ## Tests
 
 ### 10 Apples
+
+>![image](https://user-images.githubusercontent.com/45917844/91656258-7094b300-eaf2-11ea-9811-a3cc160583a0.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91656264-78545780-eaf2-11ea-9716-f4022004a2ab.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91656273-80ac9280-eaf2-11ea-8d15-4ec5669956f2.png)
   
   1. As seen in last test (mouse_test_7), after about 1.4M steps, maxQ suddenly stopped changing.
+> Test2
+
+>![image](https://user-images.githubusercontent.com/45917844/91637635-d165b200-ea44-11ea-8cb8-4972a56a39c4.png)
+
+> Test3
+
+>![image](https://user-images.githubusercontent.com/45917844/91637689-34efdf80-ea45-11ea-98e9-e1df8e394b67.png)
 
   2. Histogram shows there's no update to the weights after 1.4M steps.
+> Sample layer : Conv1D_7 ; last layer of an eye
+
+>![image](https://user-images.githubusercontent.com/45917844/91656397-61623500-eaf3-11ea-9455-5c41b2f30d39.png)
 
   3. Looks like the agent has trapped in local minima.
 
