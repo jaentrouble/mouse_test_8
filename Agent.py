@@ -202,6 +202,7 @@ class Player():
             loss = tf.math.reduce_mean(weights * unweighted_loss)
             tf.summary.scalar('Loss', loss, total_step)
             scaled_loss = self.model.optimizer.get_scaled_loss(loss)
+            tf.summary.scalar('Scaled_Loss', scaled_loss, total_step)
 
         priority = (tf.math.abs(q_samp - q_sa) + hp.Buf.epsilon)**hp.Buf.alpha
         trainable_vars = self.model.trainable_variables
