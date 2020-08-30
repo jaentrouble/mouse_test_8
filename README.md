@@ -41,10 +41,12 @@ Increase apple number And see if that helps.
   
   1. As seen in last test (mouse_test_7), after about 1.4M steps, maxQ suddenly stopped changing.
 > Test2
-![image](https://user-images.githubusercontent.com/45917844/91637635-d165b200-ea44-11ea-8cb8-4972a56a39c4.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91637635-d165b200-ea44-11ea-8cb8-4972a56a39c4.png)
 
 > Test3
-![image](https://user-images.githubusercontent.com/45917844/91637689-34efdf80-ea45-11ea-98e9-e1df8e394b67.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91637689-34efdf80-ea45-11ea-98e9-e1df8e394b67.png)
 
   2. Histogram shows there's no update to the weights after 1.4M steps.
 
