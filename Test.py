@@ -122,7 +122,7 @@ if not args.load:
 else:
     save_dir, _ = os.path.split(args.load)
 next_dir = os.path.join(save_dir,str(next_save))
-score = player.evaluate(gym.make(ENVIRONMENT), vid_type)
+score = player.evaluate(gym.make(ENVIRONMENT, **env_kwargs), vid_type)
 print('eval_score:{0}'.format(score))
 print('{0}steps took {1} sec'.format(total_steps,time.time()-st))
 
