@@ -49,6 +49,9 @@ Increase apple number And see if that helps.
 >![image](https://user-images.githubusercontent.com/45917844/91637689-34efdf80-ea45-11ea-98e9-e1df8e394b67.png)
 
   2. Histogram shows there's no update to the weights after 1.4M steps.
+> Sample layer : Conv1D_7 ; last layer of an eye
+
+>![image](https://user-images.githubusercontent.com/45917844/91656397-61623500-eaf3-11ea-9455-5c41b2f30d39.png)
 
   3. Looks like the agent has trapped in local minima.
 
