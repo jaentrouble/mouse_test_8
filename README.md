@@ -59,6 +59,22 @@ Increase apple number And see if that helps.
   - In last Bonus test (mouse_test_7), having low learning rate did stop maxQ value from increasing any farther, but maxQ value still shaked a bit.
   - However, in this test, maxQ value had stopped to total flat, so I decided to tweak epsilon first.
 
+### Epsilon 1 to 0.1 for 1.5M steps
+
+>![image](https://user-images.githubusercontent.com/45917844/91663585-c08c6d80-eb24-11ea-8124-84f1230fc36d.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91663599-d0a44d00-eb24-11ea-9606-f4a8e9f44ca0.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91663604-da2db500-eb24-11ea-95e4-57d748b8aad5.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91663632-15c87f00-eb25-11ea-882d-08d29a27e226.png)
+
+1. The exact same thing happened. Suddenly maxQ stopped after 1.7M steps
+
+2. Some sort of a bug?
+
+- Same hyperparameters, without any mixed_precision things and no reloading (as memory leaking is not a big issue right now, with 32G of ram.)
+
 ## Discussion
 
 ## TODO
