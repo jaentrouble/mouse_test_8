@@ -16,6 +16,6 @@ class Buf():
     beta = 0.4
     epsilon = 1e-3
 
-Model_save = 100000
+Model_save = 200000
 
 histogram = 100000

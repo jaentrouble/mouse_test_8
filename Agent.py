@@ -164,10 +164,11 @@ class Player():
             indices = [i for i, x in enumerate(q[0]) if x==m]
             return random.choice(indices)
 
-    def act(self, before_state):
+    def act(self, before_state, record=True):
         q = self._tf_q(before_state)
         action = self.choose_action(q.numpy())
-        tf.summary.scalar('maxQ', tf.math.reduce_max(q), self.total_steps)
+        if record:
+            tf.summary.scalar('maxQ', tf.math.reduce_max(q), self.total_steps)
         return action
         
 
@@ -300,10 +301,9 @@ class Player():
             loop += 1
             if not loop % 100:
                 print('Eval : {}step passed'.format(loop))
-            a = self.act(o)
+            a = self.act(o, record=False)
             o,r,done,i = env.step(a)
-            if i['ate_apple']:
-                score += 1
+            score += r
             #eye recording
             rt_eye = np.flip(o['Right'][:,-1,:],axis=0)
             lt_eye = o['Left'][:,-1,:]
