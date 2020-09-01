@@ -121,10 +121,37 @@ Increase apple number And see if that helps.
 
 2. It looks like it's not some kind of a bug. There seems to be a local minima.
 
-3. 'Without reloading 1' test did work without the problem, but it also showed that current learning rate is not high enough.
+3. Considering the result of 'without reloading 1' test, maybe the learning rate is too low
 
 - Try : modify learning rate.
 
+### learning rate 0.01 ~ 0.0005 (decaying over 2M steps)
+
+>![image](https://user-images.githubusercontent.com/45917844/91826800-078b7780-ec79-11ea-9ba7-bd8ef47faeb8.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91826831-12460c80-ec79-11ea-83ed-8ef1b70331df.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91826866-1a9e4780-ec79-11ea-8f52-eb1eb168db7d.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91826909-2853cd00-ec79-11ea-92a0-4edb559209b8.png)
+
+1. Again, there was no update.
+
+2. Checked the eval recordings. Every time when the model stops learning, it was when the model chose only one action for any states. In this environment, there is no punishment, which makes it almost impossible to get out of the local minima when the model gives big Q value to a single action, regardless of states. Maximization bias may be the problem.
+
+- Now it's time to implement some new things to the learning algorithm.
+
+
 ## Discussion
 
+1. Even with the exact same code, the result can vary much.
+
+2. I think this is time to move on to other algorithms. First, try Double DQN and/or Dueling DQN
+
 ## TODO
+
+1. Implement Double DQN
+
+2. Implement Dueling DQN
+
+- See any one of them can help learning without changing the environment any farther.
