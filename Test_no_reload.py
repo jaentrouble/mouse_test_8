@@ -23,6 +23,8 @@ hp.epsilon = 1
 hp.epsilon_min = 0.1
 hp.epsilon_nstep = 1500000
 hp.Model_save = 200000
+hp.lr_start = 0.01
+hp.lr_end = 0.0005
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-r','--render', dest='render',action='store_true', default=False)
