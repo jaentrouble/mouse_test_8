@@ -121,7 +121,7 @@ Increase apple number And see if that helps.
 
 2. It looks like it's not some kind of a bug. There seems to be a local minima.
 
-3. 'Without reloading 1' test did work without problem, but it also showed that current learning rate is not high enough.
+3. 'Without reloading 1' test did work without the problem, but it also showed that current learning rate is not high enough.
 
 - Try : modify learning rate.
 
