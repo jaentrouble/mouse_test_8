@@ -73,7 +73,57 @@ Increase apple number And see if that helps.
 
 2. Some sort of a bug?
 
-- Same hyperparameters, without any mixed_precision things and no reloading (as memory leaking is not a big issue right now, with 32G of ram.)
+- Same hyperparameters, without any mixed_precision things(loss scaling was still in my code) and no reloading (as memory leaking is not a big issue right now, with 32G of ram.)
+
+### Without reloading & loss scaling ... 1
+
+>![image](https://user-images.githubusercontent.com/45917844/91784103-02103c00-ec3d-11ea-84de-b654d09a5cab.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91784113-09374a00-ec3d-11ea-9290-326210de785d.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91784128-148a7580-ec3d-11ea-9690-25260bb70976.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91784188-3c79d900-ec3d-11ea-8a88-38bc3a72f8b1.png)
+
+1. Seems like it's working now.
+
+2. See if it was a reloading problem or loss scaling problem
+
+### With reloading, same conditions
+
+>![image](https://user-images.githubusercontent.com/45917844/91784501-0d179c00-ec3e-11ea-956d-0c46ca10bad6.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91784514-13a61380-ec3e-11ea-83c2-3979e34f92a9.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91784536-1dc81200-ec3e-11ea-9807-a04aef1d1d24.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91784569-2d475b00-ec3e-11ea-9cf8-3d67f064a076.png)
+
+1. It happened again.
+
+2. However, this time, it is a little bit different, that there is some small fluctuation in maxQ value.
+
+3. Moreover, to conclude that it's reloading problem, there are still some suspicious things. The point when maxQ value suddenly stops fluctuating is not consistent, even with same conditions. Even more, in this test, reloading was by every 500k steps, but the critical point is in between the reloading points.
+
+4. To see if it is just a matter of luck (or randomness), did one more test without reloading, in a very same condition as the test right before this test.
+
+### Without reloading ... 2
+
+>![image](https://user-images.githubusercontent.com/45917844/91786044-b6ac5c80-ec41-11ea-826a-ebd3095e5317.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91786059-bd3ad400-ec41-11ea-9aff-13c41414bd88.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91786065-c330b500-ec41-11ea-89db-82c3708c7562.png)
+
+>![image](https://user-images.githubusercontent.com/45917844/91786088-ce83e080-ec41-11ea-836d-266ebb42dc4c.png)
+
+1. This time, it happened from the beginning.
+
+2. It looks like it's not some kind of a bug. There seems to be a local minima.
+
+3. 'Without reloading 1' test did work without problem, but it also showed that current learning rate is not high enough.
+
+- Try : modify learning rate.
 
 ## Discussion
 
